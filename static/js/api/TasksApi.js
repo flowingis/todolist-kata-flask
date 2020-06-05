@@ -29,6 +29,18 @@ class TasksApi {
         }
     }
 
+    async delete(taskId) {
+        let options = {
+            method: 'DELETE'
+        };
+        try {
+            await fetch(`/api/tasks/${taskId}`, options);
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+    }
+
 }
 
 export default TasksApi;

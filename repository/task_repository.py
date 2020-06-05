@@ -1,6 +1,6 @@
 from abc import abstractmethod, ABC
 
-from command.task_command import TaskCommand
+from command.task_add_command import TaskAddCommand
 from model.task import Task
 
 
@@ -11,5 +11,9 @@ class TaskRepository(ABC):
         pass
 
     @abstractmethod
-    def add(self, command: TaskCommand) -> Task:
+    def add(self, command: TaskAddCommand) -> Task:
+        pass
+
+    @abstractmethod
+    def delete(self, task_id: str):
         pass

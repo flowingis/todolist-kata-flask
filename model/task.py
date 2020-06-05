@@ -1,7 +1,7 @@
 import uuid
 from dataclasses import dataclass
 
-from command.task_command import TaskCommand
+from command.task_add_command import TaskAddCommand
 
 
 @dataclass
@@ -17,7 +17,7 @@ class Task:
         )
 
     @classmethod
-    def from_command(cls, command: TaskCommand):
+    def from_command(cls, command: TaskAddCommand):
         return cls(
             uuid=str(uuid.uuid4()),
             description=command.description

@@ -1,7 +1,7 @@
 from flask import jsonify
 from injector import inject
 
-from command.task_command import TaskCommand
+from command.task_add_command import TaskAddCommand
 from model.task import Task
 from repository.task_repository import TaskRepository
 
@@ -15,5 +15,8 @@ class TaskService:
     def list(self) -> []:
         return self.task_repository.list()
 
-    def add(self, command: TaskCommand) -> Task:
+    def add(self, command: TaskAddCommand) -> Task:
         return self.task_repository.add(command)
+
+    def delete(self, task_id: str):
+        self.task_repository.delete(task_id)

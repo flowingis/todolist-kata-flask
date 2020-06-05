@@ -6,6 +6,12 @@ export default {
     name: 'App',
     template: `
         <div class="container mx-auto p-4">
+            <div>
+                <div class="text-2xl mb-2">ToDo List - Flask App</div>
+            </div>
+            
+            <hr class="mb-4">
+            
             <div class="max-w-sm rounded overflow-hidden shadow-lg">              
                 <div class="px-6 py-4">
                     <div class="font-bold text-xl mb-2">New Task</div>
@@ -20,21 +26,29 @@ export default {
                     </div>
                 </div>
                 <div class="px-6 py-4">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="addTask()">Insert</button>
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4" @click="addTask()">Insert</button>
                 </div>
             </div>
                         
-            <hr class="mb-4">
+            <hr class="mt-4 mb-4">
             
             <div>
-                <div class="text-2xl mb-2">Task List:</div>
+                <div class="text-xl mb-2">Task List:</div>
             </div>
             
             <hr class="mb-4">
             
             <ul>
                 <li v-for="task in tasks">
-                    <div>{{task.description}}</div>
+                    <div class="mb-2">
+                        <div class="float-left">
+                            {{task.description}}
+                        </div>
+                        <div class="float-right">
+                            <button class="bg-red-500 hover:bg-red-700 text-white py-1 px-1" @click="deleteTask(task.uuid)">Delete</button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
                 </li>
             </ul>
             
@@ -60,6 +74,10 @@ export default {
             let newTask = await taskApi.add(requestData);
             this.tasks.unshift(newTask);
             this.clearInputFields();
+        },
+        async deleteTask(taskId) {
+            await taskApi.delete(taskId);
+            await this.getTasks();
         },
         clearInputFields() {
             this.taskDescription = '';

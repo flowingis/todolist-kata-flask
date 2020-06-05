@@ -4,7 +4,7 @@ from flask import json
 
 
 @dataclass
-class TaskCommand:
+class TaskAddCommand:
     description: str
 
     @classmethod

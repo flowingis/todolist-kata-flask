@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request, json
 from injector import inject
 
-from command.task_command import TaskCommand
+from command.task_add_command import TaskAddCommand
 from model.task import Task
 from service.task_service import TaskService
 
@@ -17,5 +17,12 @@ def tasks_list(task_service: TaskService) -> []:
 @inject
 @tasks_api.route('/api/tasks', methods=['POST'])
 def tasks_add(task_service: TaskService) -> Task:
-    command = TaskCommand.from_json_str(request.get_data())
+    command = TaskAddCommand.from_json_str(request.get_data())
     return jsonify(task_service.add(command))
+
+
+@inject
+@tasks_api.route('/api/tasks/<task_id>', methods=['DELETE'])
+def tasks_delete(task_service: TaskService, task_id: str):
+    task_service.delete(task_id)
+    return '', 200
