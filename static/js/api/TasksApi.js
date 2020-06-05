@@ -2,14 +2,30 @@ class TasksApi {
 
     async list() {
         let options = {
-          method: 'GET'
+            method: 'GET'
         };
         try {
-          let response = await fetch('/api/tasks', options);
-          let data = await response.json();
-          return data;
+            let response = await fetch('/api/tasks', options);
+            let data = await response.json();
+            return data;
         } catch (err) {
-          return null;
+            console.log(err);
+            return null;
+        }
+    }
+
+    async add(task) {
+        let options = {
+            method: 'POST',
+            body: JSON.stringify(task)
+        };
+        try {
+            let response = await fetch('/api/tasks', options);
+            let data = await response.json();
+            return data;
+        } catch (err) {
+            console.log(err);
+            return null;
         }
     }
 
