@@ -18,6 +18,10 @@ class TestTaskService(TestCase):
 
         self.assertEqual(0, len(tasks))
 
+    def test_add_with_empty_command_should_throw_assertion_error(self):
+        with self.assertRaises(AssertionError):
+            self.task_service.add(None)
+
     def test_add_should_return_just_created_task(self):
         command = TaskAddCommand(description='nuovo task')
         task: Task = self.task_service.add(command)
@@ -28,7 +32,11 @@ class TestTaskService(TestCase):
         self.assertEqual(command.description, task.description)
         self.assertEqual(1, num_tasks_after_insert)
 
-    def test_delete_with_non_valid_id_should_throws_exception(self):
+    def test_delete_with_empty_id_should_throw_exception(self):
+        with self.assertRaises(AssertionError):
+            self.task_service.delete(None)
+
+    def test_delete_with_non_valid_id_should_throw_exception(self):
         with self.assertRaises(Exception):
             self.task_service.delete("xxxx")
 

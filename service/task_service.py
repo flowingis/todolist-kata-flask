@@ -16,7 +16,11 @@ class TaskService:
         return self.task_repository.list()
 
     def add(self, command: TaskAddCommand) -> Task:
+        assert command is not None
+
         return self.task_repository.add(command)
 
     def delete(self, task_id: str):
+        assert task_id is not None
+
         self.task_repository.delete(task_id)
