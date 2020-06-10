@@ -11,7 +11,15 @@ class TaskRepository(ABC):
         pass
 
     @abstractmethod
-    def add(self, command: TaskAddCommand) -> Task:
+    def get(self, task_id: str):
+        pass
+
+    @abstractmethod
+    def add(self, new_task: Task) -> Task:
+        pass
+
+    @abstractmethod
+    def update(self, task_id: str, new_task: Task):
         pass
 
     @abstractmethod
