@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from command.task_add_command import TaskAddCommand
+from command.task_update_command import TaskUpdateCommand
 from model.task import Task
 from repository.task_repository_memory import TaskRepositoryMemory
 from service.task_service import TaskService
@@ -50,3 +51,19 @@ class TestTaskService(TestCase):
 
         self.assertEqual(1, num_tasks_after_insert)
         self.assertEqual(0, num_tasks_after_delete)
+
+    def test_update_with_non_valid_id_should_throw_exception(self):
+        with self.assertRaises(Exception):
+            command = TaskUpdateCommand(description='task modificato')
+            self.task_service.update("xxxx", command)
+
+    def test_update_with_valid_id_should_update_the_right_task(self):
+        add_command = TaskAddCommand(description='nuovo task')
+        task: Task = self.task_service.add(add_command)
+        num_tasks_after_insert: int = len(self.task_service.list())
+        uuid_to_update = task.uuid
+        update_command = TaskUpdateCommand(description='task modificato')
+        self.task_service.update(uuid_to_update, update_command)
+        read_task: Task = self.task_service.get(uuid_to_update)
+
+        self.assertEqual('task modificato', read_task.description)
