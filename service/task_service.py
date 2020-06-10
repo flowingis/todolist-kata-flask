@@ -32,3 +32,7 @@ class TaskService:
     def delete(self, task_id: str):
         assert task_id is not None
         self.task_repository.delete(task_id)
+
+    def mark_as_done(self, task_id: str):
+        assert task_id is not None
+        self.task_repository.mark_as_done(task_id)

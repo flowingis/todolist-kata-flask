@@ -68,6 +68,18 @@ class TasksApi {
         }
     }
 
+    async markAsDone(taskId) {
+        let options = {
+            method: 'POST'
+        };
+        try {
+            await fetch(`/api/tasks/${taskId}/done`, options);
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+    }
+
 }
 
 export default TasksApi;

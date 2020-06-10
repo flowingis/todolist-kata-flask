@@ -41,3 +41,10 @@ def tasks_update(task_service: TaskService, task_id: str):
 def tasks_delete(task_service: TaskService, task_id: str):
     task_service.delete(task_id)
     return '', 200
+
+
+@inject
+@tasks_api.route('/api/tasks/<task_id>/done', methods=['POST'])
+def tasks_done(task_service: TaskService, task_id: str):
+    task_service.mark_as_done(task_id)
+    return '', 200

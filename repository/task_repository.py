@@ -25,3 +25,7 @@ class TaskRepository(ABC):
     @abstractmethod
     def delete(self, task_id: str):
         pass
+
+    @abstractmethod
+    def mark_as_done(self, task_id: str):
+        pass

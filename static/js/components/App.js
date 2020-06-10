@@ -62,15 +62,34 @@ export default {
             
             <ul>
                 <li v-for="task in tasks">
-                    <div class="mb-2">
+                    <div v-if="task.done == 0" class="mb-2">
                         <div class="float-left">
                             {{task.description}}
                         </div>
                         <div class="float-right">
+                            <button class="bg-green-500 hover:bg-green-700 text-white py-1 w-16" @click="markAsDone(task.uuid)">Done</button>
                             <button class="bg-blue-500 hover:bg-blue-700 text-white py-1 w-16" @click="editTask(task.uuid)">Edit</button>
                             <button class="bg-red-500 hover:bg-red-700 text-white py-1 w-16" @click="deleteTask(task.uuid)">Delete</button>
                         </div>
                         <div class="clearfix"></div>
+                    </div>
+                </li>
+            </ul>
+            
+            <hr class="mt-4 mb-4">
+            
+            <div>
+                <div class="text-xl mb-2">Tasks Done:</div>
+            </div>
+            
+            <hr class="mb-4">
+            
+            <ul>
+                <li v-for="task in tasks">
+                    <div v-if="task.done == 1" class="mb-2">
+                        <div>
+                            {{task.description}}
+                        </div>                        
                     </div>
                 </li>
             </ul>
@@ -115,6 +134,10 @@ export default {
         },
         async deleteTask(taskId) {
             await taskApi.delete(taskId);
+            await this.getTasks();
+        },
+        async markAsDone(taskId) {
+            await taskApi.markAsDone(taskId);
             await this.getTasks();
         },
         clearInputFields() {

@@ -39,7 +39,7 @@ class TestTaskService(TestCase):
 
     def test_delete_with_non_valid_id_should_throw_exception(self):
         with self.assertRaises(Exception):
-            self.task_service.delete("xxxx")
+            self.task_service.delete('xxxx')
 
     def test_delete_with_valid_id_should_remove_the_right_task(self):
         command = TaskAddCommand(description='nuovo task')
@@ -55,15 +55,28 @@ class TestTaskService(TestCase):
     def test_update_with_non_valid_id_should_throw_exception(self):
         with self.assertRaises(Exception):
             command = TaskUpdateCommand(description='task modificato')
-            self.task_service.update("xxxx", command)
+            self.task_service.update('xxxx', command)
 
     def test_update_with_valid_id_should_update_the_right_task(self):
         add_command = TaskAddCommand(description='nuovo task')
         task: Task = self.task_service.add(add_command)
-        num_tasks_after_insert: int = len(self.task_service.list())
         uuid_to_update = task.uuid
         update_command = TaskUpdateCommand(description='task modificato')
         self.task_service.update(uuid_to_update, update_command)
         read_task: Task = self.task_service.get(uuid_to_update)
 
         self.assertEqual('task modificato', read_task.description)
+
+    def test_done_with_non_valid_id_should_throw_exception(self):
+        with self.assertRaises(Exception):
+            command = TaskUpdateCommand(description='task modificato')
+            self.task_service.mark_as_done('xxxx')
+
+    def test_done_with_valid_id_should_update_the_right_task(self):
+        add_command = TaskAddCommand(description='nuovo task')
+        task: Task = self.task_service.add(add_command)
+        uuid_to_update = task.uuid
+        self.task_service.mark_as_done(uuid_to_update)
+        read_task: Task = self.task_service.get(uuid_to_update)
+
+        self.assertEqual(1, read_task.done)
