@@ -9,13 +9,17 @@ class Task:
     uuid: str
     description: str
     done: int
+    tags: []
 
     @classmethod
-    def create(cls, description: str):
+    def create(cls, description: str, tags=None):
+        if tags is None:
+            tags = []
         return cls(
             uuid=str(uuid.uuid4()),
             description=description,
-            done=0
+            done=0,
+            tags=tags
         )
 
     @classmethod
@@ -23,5 +27,6 @@ class Task:
         return cls(
             uuid=str(uuid.uuid4()),
             description=command.description,
-            done=0
+            done=0,
+            tags=command.tags
         )

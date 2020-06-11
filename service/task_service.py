@@ -1,4 +1,3 @@
-from flask import jsonify
 from injector import inject
 
 from command.task_add_command import TaskAddCommand

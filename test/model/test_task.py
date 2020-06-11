@@ -16,10 +16,13 @@ class TestTask(TestCase):
         self.assertEqual(0, task.done)
 
     def test_from_command(self):
-        command = TaskAddCommand(description='nuovo task')
+        command = TaskAddCommand(description='nuovo task', tags=['#abc', '#def'])
         task = Task.from_command(command)
 
         self.assertIsNotNone(task)
         self.assertRegex(task.uuid, r'%s' % UUID4_REGEX)
         self.assertEqual(command.description, task.description)
         self.assertEqual(0, task.done)
+        self.assertEqual(2, len(task.tags))
+        self.assertEqual('#abc', task.tags[0])
+        self.assertEqual('#def', task.tags[1])

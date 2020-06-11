@@ -24,7 +24,7 @@ class TestTaskService(TestCase):
             self.task_service.add(None)
 
     def test_add_should_return_just_created_task(self):
-        command = TaskAddCommand(description='nuovo task')
+        command = TaskAddCommand(description='nuovo task', tags=['#abc', '#def'])
         task: Task = self.task_service.add(command)
         num_tasks_after_insert: int = len(self.task_service.list())
 
@@ -32,6 +32,7 @@ class TestTaskService(TestCase):
         self.assertRegex(task.uuid, r'%s' % UUID4_REGEX)
         self.assertEqual(command.description, task.description)
         self.assertEqual(1, num_tasks_after_insert)
+        self.assertEqual(2, len(task.tags))
 
     def test_delete_with_empty_id_should_throw_exception(self):
         with self.assertRaises(AssertionError):
@@ -42,7 +43,7 @@ class TestTaskService(TestCase):
             self.task_service.delete('xxxx')
 
     def test_delete_with_valid_id_should_remove_the_right_task(self):
-        command = TaskAddCommand(description='nuovo task')
+        command = TaskAddCommand(description='nuovo task', tags=[])
         task: Task = self.task_service.add(command)
         num_tasks_after_insert: int = len(self.task_service.list())
         uuid_to_delete = task.uuid
@@ -58,21 +59,23 @@ class TestTaskService(TestCase):
             self.task_service.update('xxxx', command)
 
     def test_update_with_valid_id_should_update_the_right_task(self):
-        add_command = TaskAddCommand(description='nuovo task')
+        add_command = TaskAddCommand(description='nuovo task', tags=[])
         task: Task = self.task_service.add(add_command)
         uuid_to_update = task.uuid
-        update_command = TaskUpdateCommand(description='task modificato')
+        update_command = TaskUpdateCommand(description='task modificato', tags=['#abc'])
         self.task_service.update(uuid_to_update, update_command)
         read_task: Task = self.task_service.get(uuid_to_update)
 
         self.assertEqual('task modificato', read_task.description)
+        self.assertEqual(1, len(read_task.tags))
+        self.assertEqual('#abc', read_task.tags[0])
 
     def test_done_with_non_valid_id_should_throw_exception(self):
         with self.assertRaises(Exception):
             self.task_service.mark_as_done('xxxx')
 
     def test_done_with_valid_id_should_update_the_right_task(self):
-        add_command = TaskAddCommand(description='nuovo task')
+        add_command = TaskAddCommand(description='nuovo task', tags=[])
         task: Task = self.task_service.add(add_command)
         uuid_to_update = task.uuid
         self.task_service.mark_as_done(uuid_to_update)
@@ -85,7 +88,7 @@ class TestTaskService(TestCase):
             self.task_service.undone('xxxx')
 
     def test_undone_with_valid_id_should_update_the_right_task(self):
-        add_command = TaskAddCommand(description='nuovo task')
+        add_command = TaskAddCommand(description='nuovo task', tags=[])
         task: Task = self.task_service.add(add_command)
         uuid_to_update = task.uuid
 
