@@ -29,3 +29,7 @@ class TaskRepository(ABC):
     @abstractmethod
     def mark_as_done(self, task_id: str):
         pass
+
+    @abstractmethod
+    def undone(self, task_id: str):
+        pass

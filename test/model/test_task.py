@@ -13,6 +13,7 @@ class TestTask(TestCase):
         self.assertIsNotNone(task)
         self.assertRegex(task.uuid, r'%s' % UUID4_REGEX)
         self.assertEqual('test task', task.description)
+        self.assertEqual(0, task.done)
 
     def test_from_command(self):
         command = TaskAddCommand(description='nuovo task')
@@ -21,3 +22,4 @@ class TestTask(TestCase):
         self.assertIsNotNone(task)
         self.assertRegex(task.uuid, r'%s' % UUID4_REGEX)
         self.assertEqual(command.description, task.description)
+        self.assertEqual(0, task.done)

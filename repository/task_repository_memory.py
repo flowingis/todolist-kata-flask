@@ -33,8 +33,14 @@ class TaskRepositoryMemory(TaskRepository):
         self.tasks.remove(task_to_delete)
 
     def mark_as_done(self, task_id: str):
+        self.__update_done_state(task_id, 1)
+
+    def undone(self, task_id: str):
+        self.__update_done_state(task_id, 0)
+
+    def __update_done_state(self, task_id: str, done):
         task_to_update = self.get(task_id)
         if task_to_update is None:
             raise Exception('Task not found: %s' % task_id)
         index = self.tasks.index(task_to_update)
-        self.tasks[index].done = 1
+        self.tasks[index].done = done

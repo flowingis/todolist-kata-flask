@@ -69,7 +69,6 @@ class TestTaskService(TestCase):
 
     def test_done_with_non_valid_id_should_throw_exception(self):
         with self.assertRaises(Exception):
-            command = TaskUpdateCommand(description='task modificato')
             self.task_service.mark_as_done('xxxx')
 
     def test_done_with_valid_id_should_update_the_right_task(self):
@@ -80,3 +79,23 @@ class TestTaskService(TestCase):
         read_task: Task = self.task_service.get(uuid_to_update)
 
         self.assertEqual(1, read_task.done)
+
+    def test_undone_with_non_valid_id_should_throw_exception(self):
+        with self.assertRaises(Exception):
+            self.task_service.undone('xxxx')
+
+    def test_undone_with_valid_id_should_update_the_right_task(self):
+        add_command = TaskAddCommand(description='nuovo task')
+        task: Task = self.task_service.add(add_command)
+        uuid_to_update = task.uuid
+
+        self.task_service.mark_as_done(uuid_to_update)
+        read_task_before_undone: Task = self.task_service.get(uuid_to_update)
+        done_state_before_undone = read_task_before_undone.done
+
+        self.task_service.undone(uuid_to_update)
+        read_task_after_undone: Task = self.task_service.get(uuid_to_update)
+        done_state_after_undone = read_task_after_undone.done
+
+        self.assertEqual(1, done_state_before_undone)
+        self.assertEqual(0, done_state_after_undone)
