@@ -213,6 +213,6 @@ export default {
         clearSearchFields() {
             this.searchTaskDescription = '';
             this.searchTaskTags = '';
-        },
+        }
     }
 };
