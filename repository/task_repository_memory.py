@@ -1,10 +1,12 @@
 from model.task import Task
+from model.task_query_data import TaskQueryData
 from repository.task_repository import TaskRepository
 
 
 class TaskRepositoryMemory(TaskRepository):
     def __init__(self):
         self.tasks = []
+        self.filtered_tasks = []
 
     def list(self) -> []:
         return self.tasks
@@ -45,3 +47,16 @@ class TaskRepositoryMemory(TaskRepository):
             raise Exception('Task not found: %s' % task_id)
         index = self.tasks.index(task_to_update)
         self.tasks[index].done = done
+
+    def search(self, query_data: TaskQueryData):
+        self.filtered_tasks = list([item for item in self.tasks if self.__filter_query(item, query_data)])
+        return self.filtered_tasks
+
+    def __filter_query(self, task: Task, query_data: TaskQueryData):
+        if query_data.description and not query_data.description.lower() in task.description.lower():
+            return False
+
+        if len(query_data.tags) > 0 and not set(query_data.tags).issubset(set(task.tags)):
+            return False
+
+        return True

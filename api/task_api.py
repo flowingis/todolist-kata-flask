@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request, json
 from injector import inject
 
 from command.task_add_command import TaskAddCommand
+from command.task_search_command import TaskSearchCommand
 from command.task_update_command import TaskUpdateCommand
 from model.task import Task
 from service.task_service import TaskService
@@ -55,3 +56,10 @@ def tasks_done(task_service: TaskService, task_id: str):
 def tasks_undone(task_service: TaskService, task_id: str):
     task_service.undone(task_id)
     return '', 200
+
+
+@inject
+@tasks_api.route('/api/tasks/search', methods=['GET'])
+def tasks_search(task_service: TaskService):
+    command = TaskSearchCommand.from_request(request.args)
+    return jsonify(task_service.search(command))

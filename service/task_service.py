@@ -1,8 +1,10 @@
 from injector import inject
 
 from command.task_add_command import TaskAddCommand
+from command.task_search_command import TaskSearchCommand
 from command.task_update_command import TaskUpdateCommand
 from model.task import Task
+from model.task_query_data import TaskQueryData
 from repository.task_repository import TaskRepository
 
 
@@ -39,3 +41,7 @@ class TaskService:
     def undone(self, task_id: str):
         assert task_id is not None
         self.task_repository.undone(task_id)
+
+    def search(self, command: TaskSearchCommand):
+        assert command is not None
+        return self.task_repository.search(TaskQueryData.from_command(command))

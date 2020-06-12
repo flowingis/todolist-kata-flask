@@ -2,6 +2,7 @@ from abc import abstractmethod, ABC
 
 from command.task_add_command import TaskAddCommand
 from model.task import Task
+from model.task_query_data import TaskQueryData
 
 
 class TaskRepository(ABC):
@@ -32,4 +33,8 @@ class TaskRepository(ABC):
 
     @abstractmethod
     def undone(self, task_id: str):
+        pass
+
+    @abstractmethod
+    def search(self, query_data: TaskQueryData):
         pass
