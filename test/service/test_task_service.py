@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from command.task_add_command import TaskAddCommand
+from command.task_search_command import TaskSearchCommand
 from command.task_update_command import TaskUpdateCommand
 from model.task import Task
 from repository.task_repository_memory import TaskRepositoryMemory
@@ -102,3 +103,58 @@ class TestTaskService(TestCase):
 
         self.assertEqual(1, done_state_before_undone)
         self.assertEqual(0, done_state_after_undone)
+
+    def test_search_with_empty_query_data_should_return_entire_list(self):
+        self.task_service.add(
+            TaskAddCommand(description='primo task', tags=['#abc', '#def'])
+        )
+        self.task_service.add(
+            TaskAddCommand(description='secondo task', tags=['#abc'])
+        )
+
+        search_command = TaskSearchCommand(description='', tags=[])
+        filtered_tasks = self.task_service.search(search_command)
+
+        self.assertEqual(2, len(filtered_tasks))
+
+    def test_search_description_should_return_filtered_list(self):
+        self.task_service.add(
+            TaskAddCommand(description='primo task', tags=['#abc', '#def'])
+        )
+        self.task_service.add(
+            TaskAddCommand(description='secondo task', tags=['#abc'])
+        )
+
+        search_command = TaskSearchCommand(description='primo', tags=[])
+        filtered_tasks = self.task_service.search(search_command)
+
+        self.assertEqual(1, len(filtered_tasks))
+        self.assertEqual('primo task', filtered_tasks[0].description)
+
+    def test_search_tags_should_return_filtered_list(self):
+        self.task_service.add(
+            TaskAddCommand(description='primo task', tags=['#abc', '#def', '#ghi'])
+        )
+        self.task_service.add(
+            TaskAddCommand(description='secondo task', tags=['#abc', '#zxc'])
+        )
+
+        search_command = TaskSearchCommand(description='', tags=['#abc', '#def'])
+        filtered_tasks = self.task_service.search(search_command)
+
+        self.assertEqual(1, len(filtered_tasks))
+        self.assertEqual('primo task', filtered_tasks[0].description)
+
+    def test_search_description_and_tags_should_return_filtered_list(self):
+        self.task_service.add(
+            TaskAddCommand(description='primo task', tags=['#abc', '#def', '#ghi'])
+        )
+        self.task_service.add(
+            TaskAddCommand(description='secondo task', tags=['#abc', '#zxc'])
+        )
+
+        search_command = TaskSearchCommand(description='primo', tags=['#abc', '#def'])
+        filtered_tasks = self.task_service.search(search_command)
+
+        self.assertEqual(1, len(filtered_tasks))
+        self.assertEqual('primo task', filtered_tasks[0].description)

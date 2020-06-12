@@ -2,8 +2,11 @@ import unittest
 
 testmodules = [
     'test.model.test_task',
+    'test.model.test_task_query_data',
     'test.service.test_task_service',
-    'test.command.test_task_command'
+    'test.command.test_task_add_command',
+    'test.command.test_task_update_command',
+    'test.command.test_task_search_command'
 ]
 
 
