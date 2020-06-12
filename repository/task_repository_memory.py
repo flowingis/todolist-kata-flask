@@ -25,7 +25,7 @@ class TaskRepositoryMemory(TaskRepository):
             raise Exception('Task not found: %s' % task_id)
         index = self.tasks.index(task_to_update)
         self.tasks[index].description = new_task.description
-        self.tasks[index].tags = new_task.tags[:]
+        self.tasks[index].tags = list(new_task.tags)
 
     def delete(self, task_id: str):
         task_to_delete = self.get(task_id)

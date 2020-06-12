@@ -29,7 +29,6 @@ export default {
                                        id="tags" 
                                        type="text"
                                        v-model="taskTags">
-
                             </div>
                         </div>
                     </div>
